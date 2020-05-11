@@ -43,15 +43,15 @@ export class QueueRecorder extends cdk.Construct {
       code: lambda.Code.fromAsset("./java-lambda/li/target/myJar.jar"),
       handler: 'com.yimeng.li.HttpHandler::handleGetAllRequest',
     });
-    
-    const api = new apigw.LambdaRestApi(parent, 'test-api', {
-      handler: fn3,
-      proxy: false
+
+    const api = new apigw.RestApi(parent, 'test-api', {
+      restApiName: 'DynamoDB CRUD service'
     });
 
 
     const items = api.root.addResource('items');
-    items.addMethod('GET');  // GET /items
+    const getAllIntegration = new apigw.LambdaIntegration(fn3);
+    items.addMethod('GET', getAllIntegration);  // GET /items
 
     table.grantWriteData(fn);
   }
