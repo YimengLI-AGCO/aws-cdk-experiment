@@ -5,6 +5,7 @@ import os
 import uuid
 
 def handler(event, context):
+  print("HELLO PYTHON")
   dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
   table = dynamodb.Table(os.environ['TABLE_NAME'])
 
