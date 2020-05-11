@@ -38,11 +38,13 @@ export class QueueRecorder extends cdk.Construct {
 
     // defines an API Gateway REST API resource backed by our "hello" function.
     
-    const fn3 = new lambda.Function(this, 'HelloFunction2', {
+    const getAllData = new lambda.Function(this, 'HelloFunction2', {
       runtime: lambda.Runtime.JAVA_8,
       code: lambda.Code.fromAsset("./java-lambda/li/target/myJar.jar"),
       handler: 'com.yimeng.li.HttpHandler::handleGetAllRequest',
     });
+
+    table.grantReadData(getAllData);
 
     const api = new apigw.RestApi(parent, 'test-api', {
       restApiName: 'DynamoDB CRUD service'
@@ -50,9 +52,8 @@ export class QueueRecorder extends cdk.Construct {
 
 
     const items = api.root.addResource('items');
-    const getAllIntegration = new apigw.LambdaIntegration(fn3);
+    const getAllIntegration = new apigw.LambdaIntegration(getAllData);
     items.addMethod('GET', getAllIntegration);  // GET /items
-
     table.grantWriteData(fn);
   }
 }
