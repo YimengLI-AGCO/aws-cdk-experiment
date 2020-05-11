@@ -22,7 +22,7 @@ export class QueueRecorder extends cdk.Construct {
     const fn = new lambda.Function(this, 'HelloFunction1', {
       runtime: lambda.Runtime.JAVA_8,
       code: lambda.Code.fromAsset("./java-lambda/li/target/myJar.jar"),
-      handler: 'com.yimeng.li.Handler'
+      handler: 'com.yimeng.li.Handler',
     });
 
     fn.addEventSource(new event_sources.SqsEventSource(props.inputQueue));
