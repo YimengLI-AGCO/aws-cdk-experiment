@@ -1,6 +1,8 @@
 import * as cdk from '@aws-cdk/core';
 import sqs = require('@aws-cdk/aws-sqs');
 import { QueueRecorder } from './queue-recorder';
+import lambda = require('@aws-cdk/aws-lambda');
+import apigateway = require('@aws-cdk/aws-apigateway');
 
 
 export class HelloCdkStack extends cdk.Stack {
