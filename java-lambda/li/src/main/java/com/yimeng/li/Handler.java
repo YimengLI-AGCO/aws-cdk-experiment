@@ -1,21 +1,35 @@
 package com.yimeng.li;
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.amazonaws.services.lambda.runtime.events.SQSEvent;
+import com.amazonaws.services.lambda.runtime.events.SQSEvent.SQSMessage;
 
-import java.util.Map;
 
 /**
  * Hello World test
  */
-public class Handler implements RequestHandler<Map<String,String>, String> {
+public class Handler implements RequestHandler<SQSEvent, String> {
   @Override
-  public String handleRequest(Map<String,String> event, Context context)
-  {
+  public String handleRequest(SQSEvent sqsEvent, Context context) {
+
     LambdaLogger logger = context.getLogger();
     String response = "李一萌 [200] OK";
-    logger.log("Name: 李一萌 " );
+
+    AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
+    DynamoDBMapper dynamoDB = new DynamoDBMapper(client);
+
+    for (SQSMessage msg : sqsEvent.getRecords()) {
+      QueueRecorder item = new QueueRecorder();
+      item.setPayload(msg.getBody());
+      dynamoDB.save(item);
+    }
+
+    logger.log("Name: 李一萌 3" );
     return response;
   }
 }
