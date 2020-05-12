@@ -1,8 +1,8 @@
 import * as cdk from '@aws-cdk/core';
 import sqs = require('@aws-cdk/aws-sqs');
 import { QueueRecorder } from './queue-recorder';
-import lambda = require('@aws-cdk/aws-lambda');
-import apigateway = require('@aws-cdk/aws-apigateway');
+import { StatusService } from './status-service';
+import dynamodb = require('@aws-cdk/aws-dynamodb');
 
 
 export class HelloCdkStack extends cdk.Stack {
@@ -11,7 +11,12 @@ export class HelloCdkStack extends cdk.Stack {
 
     // The code that defines your stack goes here
     const queue = new sqs.Queue(this, 'HelloQueue');
+    const table = new dynamodb.Table(this, 'Status', {
+      partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
+      tableName: 'Status'
+    });
 
-    new QueueRecorder(this, 'QueueRecorder', {inputQueue: queue});
+    new QueueRecorder(this, 'QueueRecorder', { inputQueue: queue, dynamoTable: table });
+    new StatusService(this, 'StatusService', { dynamoTable: table });
   }
 }
