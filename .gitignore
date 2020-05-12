@@ -24,3 +24,4 @@ java-lambda/li/mvnw
 java-lambda/li/.mvn/wrapper/maven-wrapper.jar
 helloworld.yaml
 params.json
+java-lambda/target/jarfile/myJar.jar
