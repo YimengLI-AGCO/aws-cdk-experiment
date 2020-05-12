@@ -24,7 +24,7 @@ public class Handler implements RequestHandler<SQSEvent, String> {
     DynamoDBMapper dynamoDB = new DynamoDBMapper(client);
 
     for (SQSMessage msg : sqsEvent.getRecords()) {
-      QueueRecorder item = new QueueRecorder();
+      Status item = new Status();
       item.setPayload(msg.getBody());
       dynamoDB.save(item);
     }

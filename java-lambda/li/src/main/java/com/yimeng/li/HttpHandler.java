@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 
+/**
+ * Request Handler: GET, POST
+ */
 public class HttpHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
   private static final AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard().build();
@@ -27,22 +30,66 @@ public class HttpHandler implements RequestHandler<APIGatewayProxyRequestEvent, 
     return null;
   }
 
+  /**
+   *
+   * @param request {@link APIGatewayProxyRequestEvent}(request) from the API Gateway
+   * @param context 不知道
+   * @return  {@link APIGatewayProxyResponseEvent}(response) of the API Gateway
+   */
   public APIGatewayProxyResponseEvent handleGetAllRequest(APIGatewayProxyRequestEvent request,
                                                           Context context) {
     Map<String, String> headers = new HashMap<>();
     headers.put("Content-Type", "text/plain");
     try {
-      List<QueueRecorder> list = dynamoDB.scan(QueueRecorder.class, new DynamoDBScanExpression());
+      List<Status> list = dynamoDB.scan(Status.class, new DynamoDBScanExpression());
       String body = new ObjectMapper().writeValueAsString(list);
       headers.put("Content-Type", "text/json");
-      return new APIGatewayProxyResponseEvent().withHeaders(headers).withStatusCode(200).withBody(body);
+      return new APIGatewayProxyResponseEvent()
+          .withHeaders(headers)
+          .withStatusCode(200)
+          .withBody(body);
     }
     catch (JsonProcessingException e) {
-      return new APIGatewayProxyResponseEvent().withHeaders(headers).withStatusCode(400).withBody("JSON ERROR");
+      return new APIGatewayProxyResponseEvent()
+          .withHeaders(headers)
+          .withStatusCode(400)
+          .withBody("JSON ERROR");
     }
     catch (Exception e) {
       e.printStackTrace();
-      return new APIGatewayProxyResponseEvent().withHeaders(headers).withStatusCode(400).withBody("FAIL");
+      return new APIGatewayProxyResponseEvent()
+          .withHeaders(headers)
+          .withStatusCode(400)
+          .withBody("FAIL");
+    }
+  }
+
+  /**
+   *
+   * @param request {@link APIGatewayProxyRequestEvent}(request) from the API Gateway
+   * @param context 不知道
+   * @return  {@link APIGatewayProxyResponseEvent}(response) of the API Gateway
+   */
+  public APIGatewayProxyResponseEvent handleCreateRequest(APIGatewayProxyRequestEvent request,
+                                                          Context context) {
+    Map<String, String> headers = new HashMap<>();
+    headers.put("Content-Type", "text/plain");
+    try {
+      String payload = request.getBody();
+      ObjectMapper objectMapper = new ObjectMapper();
+      Status item = objectMapper.readValue(payload, Status.class);
+      dynamoDB.save(item);
+      return new APIGatewayProxyResponseEvent()
+          .withHeaders(headers)
+          .withStatusCode(201)
+          .withBody("201: CREATED");
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+      return new APIGatewayProxyResponseEvent()
+          .withHeaders(headers)
+          .withStatusCode(400)
+          .withBody("FAIL to CREATE");
     }
   }
 }
