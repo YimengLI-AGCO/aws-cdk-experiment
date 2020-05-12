@@ -4,7 +4,6 @@ import event_sources = require('@aws-cdk/aws-lambda-event-sources');
 import sqs = require('@aws-cdk/aws-sqs');
 import dynamodb = require('@aws-cdk/aws-dynamodb');
 
-
 export interface QueueRecorderProps {
   inputQueue: sqs.Queue,
   dynamoTable: dynamodb.Table
@@ -19,7 +18,6 @@ export class QueueRecorder extends cdk.Construct {
       code: lambda.Code.fromAsset("./java-lambda/li/target/myJar.jar"),
       handler: 'com.yimeng.li.Handler',
     });
-
     
     const fn2 = new lambda.Function(this, 'HelloFunction2', {
       functionName: 'pythonWriteFunction',

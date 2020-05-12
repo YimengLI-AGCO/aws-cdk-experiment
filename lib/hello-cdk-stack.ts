@@ -10,13 +10,13 @@ export class HelloCdkStack extends cdk.Stack {
     super(scope, id, props);
 
     // The code that defines your stack goes here
-    const queue = new sqs.Queue(this, 'HelloQueue');
+    // const queue = new sqs.Queue(this, 'HelloQueue');
     const table = new dynamodb.Table(this, 'Status', {
       partitionKey: {name: 'id', type: dynamodb.AttributeType.STRING},
       tableName: 'Status'
     });
 
-    new QueueRecorder(this, 'QueueRecorder', { inputQueue: queue, dynamoTable: table });
+    // new QueueRecorder(this, 'QueueRecorder', { inputQueue: queue, dynamoTable: table });
     new StatusService(this, 'StatusService', { dynamoTable: table });
   }
 }
