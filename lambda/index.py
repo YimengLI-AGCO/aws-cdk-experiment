@@ -9,14 +9,14 @@ def handler(event, context):
   dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
   table = dynamodb.Table(os.environ['TABLE_NAME'])
 
-  message = '{} Hello {}!'.format(os.environ['TABLE_NAME'], "yimeng")
+  message = os.environ['TABLE_NAME']
   print(message)
 
   str_id = str(uuid.uuid1())
   response = table.put_item(
-    Item={
+    Item = {
       'id': str(str_id),
-      'yimeng-test': 'YIMENG - {}'.format(str_id)
+      'yimeng-test': '[WRITE FROM PYTHON]{}'.format(message)
     }
   )
 
