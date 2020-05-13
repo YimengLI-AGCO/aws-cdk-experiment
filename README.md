@@ -12,3 +12,14 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
  * `cdk deploy`      deploy this stack to your default AWS account/region
  * `cdk diff`        compare deployed stack with current state
  * `cdk synth`       emits the synthesized CloudFormation template
+
+***
+
+### How to run the project
+
+```bash
+$ cdk deploy HelloCdkStack --profile ${your_profile}
+```
+
+There're 2 Stack: `HelloCdkStack` & `BucketStack`.
+`HelloCdkStack` is depends on `BucketStack`, so when you `deploy`/`synth` `HelloCdkStack`, `BucketStack` will be `deploy`/`synth` automatically
