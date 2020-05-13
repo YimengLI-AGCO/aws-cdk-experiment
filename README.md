@@ -18,6 +18,12 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 ### How to run the project
 
 ```bash
+$ cd /java-lambda/li
+$ mvn package
+$ cd ../..
+```
+
+```bash
 $ cdk deploy HelloCdkStack --profile ${your_profile}
 ```
 
