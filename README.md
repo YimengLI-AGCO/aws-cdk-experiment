@@ -17,6 +17,8 @@ The `cdk.json` file tells the CDK Toolkit how to execute your app.
 
 ### How to run the project
 
+主要用来测试`CDK`调用`AWS Lambda`(`Java`), `DynamoDB`, `API Gateway` 以及 
+
 ```bash
 $ cd /java-lambda/li
 $ mvn package
